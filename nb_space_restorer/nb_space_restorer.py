@@ -17,13 +17,14 @@ from sklearn.model_selection import ParameterGrid
 from scipy.stats import norm
 import numpy as np
 
+from nb_space_restorer.tamil_mapper import get_mapped_uyir, get_mapped_mei
 from nb_space_restorer.nb_helper import (display_or_print, get_tqdm,
                                          load_pickle, save_pickle,
                                          try_clear_output)
 
 tqdm_ = get_tqdm()
 
-MAX_CACHE_SIZE = 1_000_000
+MAX_CACHE_SIZE = 10_000_000
 L_DEFAULT = 20
 LAMBDA_DEFAULT = 10.0
 METRIC_TO_OPTIMIZE_DEFAULT = 'F-score'
@@ -70,8 +71,8 @@ class NBSpaceRestorer:
     # ====================
     def __init__(self,
                  train_texts: list,
-                 uyir_letters: list[str],
-                 mei_letters: list[str],
+                 uyir_letters: list[str] = None,
+                 mei_letters: list[str] = None,
                  ignore_case: bool = True,
                  save_path: Optional[str] = None,
                  max_n_gram: int = 2,
@@ -98,6 +99,12 @@ class NBSpaceRestorer:
             The function to use to predict the probability of an unseen word.
             Can be 'exponential' or 'gaussian', defaults to 'exponential'
         """
+
+        if uyir_letters is None:
+            uyir_letters = get_mapped_uyir()
+
+        if mei_letters is None:
+            mei_letters = get_mapped_mei()
 
         self.save_path = save_path
         self.L = L_DEFAULT
