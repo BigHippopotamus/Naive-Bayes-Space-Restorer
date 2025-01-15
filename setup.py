@@ -10,13 +10,13 @@ REQUIREMENTS = [
 ]
 
 setup(
-    name='nb_space_restorer',
+    name='nb_tamil_space_restorer',
     version='0.1',
     description="""Train Naive Bayes-based statistical machine learning \
-models for restoring spaces to unsegmented sequences of input characters""",
-    author='Laurence Dyer',
-    author_email='ljdyer@gmail.com',
-    url='https://github.com/ljdyer/Naive-Bayes-Space-Restorer',
-    packages=['nb_space_restorer'],
+models for restoring spaces to unsegmented sequences of Tamil characters""",
+    author='Bharadwaj Sudarsan',
+    author_email='bharadwajsudarsan@gmail.com',
+    url='https://github.com/BigHippopotamus/Naive-Bayes-Space-Restorer',
+    packages=['nb_tamil_space_restorer'],
     install_requires=REQUIREMENTS
 )

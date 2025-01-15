@@ -17,10 +17,10 @@ from sklearn.model_selection import ParameterGrid
 from scipy.stats import norm
 import numpy as np
 
-from nb_space_restorer.tamil_mapper import get_mapped_uyir, get_mapped_mei
-from nb_space_restorer.nb_helper import (display_or_print, get_tqdm,
-                                         load_pickle, save_pickle,
-                                         try_clear_output)
+from nb_tamil_space_restorer.mapper import get_mapped_uyir, get_mapped_mei
+from nb_tamil_space_restorer.nb_helper import (display_or_print, get_tqdm,
+                                               load_pickle, save_pickle,
+                                               try_clear_output)
 
 tqdm_ = get_tqdm()
 
@@ -66,7 +66,7 @@ MESSAGE_TRAINING_COMPLETE = "Training complete."
 
 
 # ====================
-class NBSpaceRestorer:
+class NBTamilSpaceRestorer:
 
     # ====================
     def __init__(self,
@@ -161,7 +161,7 @@ class NBSpaceRestorer:
     @classmethod
     def load(cls,
              load_path: str,
-             read_only: bool = False) -> 'NBSpaceRestorer':
+             read_only: bool = False) -> 'NBTamilSpaceRestorer':
         """Load a previously saved instance of the class.
 
         Args:
@@ -173,7 +173,7 @@ class NBSpaceRestorer:
             loading will not be written back to the pickle file.
 
         Returns:
-          NBSpaceRestorer:
+          NBTamilSpaceRestorer:
             The loaded class instance
         """
 
