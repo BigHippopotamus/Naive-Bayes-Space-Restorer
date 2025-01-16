@@ -11,7 +11,7 @@ REQUIREMENTS = [
 
 setup(
     name='nb_tamil_space_restorer',
-    version='0.1',
+    version='0.1.1',
     description="""Train Naive Bayes-based statistical machine learning \
 models for restoring spaces to unsegmented sequences of Tamil characters""",
     author='Bharadwaj Sudarsan',
