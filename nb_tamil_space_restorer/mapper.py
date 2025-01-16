@@ -41,7 +41,7 @@ def unmap(text: str | list[str]):
             text = text.replace(k, inverse_mapping[k])
     elif type(text) is list:
         for index, chars in enumerate(text):
-            text[index] = unmap[chars]
+            text[index] = unmap(chars)
 
     return text
 
