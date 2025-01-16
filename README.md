@@ -86,7 +86,7 @@ unmap('鵵鱗鲚')
 
 ```python
 restorer = NBSpaceRestorer(
-    train_texts=train['reference'].to_list(),
+    train_texts=map(train['reference'].to_list()),
     ignore_case=True,
     save_path='AncientTamil.pickle'
     max_n_gram=3
@@ -132,8 +132,8 @@ restorer.add_grid_search(
     grid_search_name='grid_search_1',
     L=[18, 20, 22],
     lambda_=[1e-6, 1e-9, 1e-12],
-    ref=test_ref,
-    input=test_input
+    ref=map(test_ref),
+    input=map(test_input)
 )
 ```
 
@@ -274,7 +274,7 @@ restorer = NBSpaceRestorer.load(
 #### Example usage:
 
 ```python
-restorer.restore(test_input)
+unmap(restorer.restore(map(test_input)))
 ```
 
 ## References
