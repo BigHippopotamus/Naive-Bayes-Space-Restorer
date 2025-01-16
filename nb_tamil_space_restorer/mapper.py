@@ -29,8 +29,8 @@ def map(text: str | list[str]):
         for k in mapping:
             text = text.replace(k, mapping[k])
     elif type(text) is list:
-        for index, char in enumerate(text):
-            text[index] = mapping[char]
+        for index, chars in enumerate(text):
+            text[index] = map(chars)
 
     return text
 
@@ -40,8 +40,8 @@ def unmap(text: str | list[str]):
         for k in inverse_mapping:
             text = text.replace(k, inverse_mapping[k])
     elif type(text) is list:
-        for index, char in enumerate(text):
-            text[index] = inverse_mapping[char]
+        for index, chars in enumerate(text):
+            text[index] = unmap[chars]
 
     return text
 

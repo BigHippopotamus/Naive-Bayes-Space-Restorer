@@ -3,7 +3,7 @@
 Smoke tests to check that operations carried out in the interactive demo
 run on sample data without errors."""
 
-from nb_space_restorer.nb_space_restorer import NBSpaceRestorer
+from nb_tamil_space_restorer.nb_tamil_space_restorer import NBTamilSpaceRestorer
 import pandas as pd
 from pytest import fixture
 
@@ -16,7 +16,7 @@ test_ref = pd.read_csv('sample_data/test.csv')['input'].to_list()
 @fixture(scope='module')
 def restorer():
 
-    restorer_ = NBSpaceRestorer(
+    restorer_ = NBTamilSpaceRestorer(
         train,
         ignore_case=True
     )
@@ -27,7 +27,7 @@ def restorer():
 @fixture(scope='module')
 def NB_TedTalks():
 
-    restorer_ = NBSpaceRestorer.load(
+    restorer_ = NBTamilSpaceRestorer.load(
         'https://raw.githubusercontent.com/ljdyer/Naive-Bayes-Space-Restorer/main/NB_TedTalks.pickle',
         read_only=True
     )

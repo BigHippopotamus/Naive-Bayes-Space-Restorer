@@ -84,13 +84,15 @@ class NBTamilSpaceRestorer:
             The list of 'gold standard' documents (running text with spaces)
             on which to train the model.
           uyir_letters (list):
-            A list of letters that can only appear at the beginning of words
+            A mapped list of letters that can only appear at the beginning of
+            words. Can be left blank if using the included mapper and unmapper.
           mei_letters (list):
-            A list of letters that can never appear at the beginning of words
+            A mapped list of letters that can never appear at the beginning of
+            words. Can be left blank if using the included mapper and unmapper.
           ignore_case (bool, optional):
             Whether or not to ignore case during training (so that e.g.
             'banana', 'Banana', and 'BANANA' are all counted as instances
-            of 'banana'). Defaults to True.
+            of 'banana'). Only relevant if handling English. Defaults to True.
           save_path (Optional[str], optional):
             The path to a pickle file to save the model to. Defaults to None.
           max_n_gram (int, optional):
