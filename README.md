@@ -1,37 +1,46 @@
-# Naive Bayes Space Restorer
+# Naive Bayes Tamil Space Restorer
 
-A Python library for training Naive Bayes-based statistical machine learning models for restoring spaces to unsegmented sequences of input characters.
-
-E.g.
-`thisisasentence -> this is a sentence`
-
-Developed and used for the paper "Comparison of Token- and Character-Level Approaches to Restoration of Spaces, Punctuation, and Capitalization in Various Languages", which is scheduled for publication in December 2022.
-
-The model is based on the description and Python code in Norvig (2009), and the chunking methods for handling long strings is borrowed from Jenks (2018).
-
-The implementation here allows for easy restoration of spaces to entire datasets of documents with a progress bar, and for tuning of hyperparameters _L_ (maximum word length) and λ (smoothing parameter) for model optimization.
-
-## Interactive demo
-
-The quickest and best way to get acquainted with the library is through the interactive demo [here](https://colab.research.google.com/drive/1ngcioFhOvS95oSYjkC4kqIYtBZUFygx6?usp=sharing), where you can walk through the steps involved in using the library and train a space restoration model using sample data from the Ted Talks dataset used in the paper.
-
-Alternatively, scroll down for instructions on getting started and basic documentation.
+A Python library for training Naive Bayes-based statistical machine learning models for restoring spaces to unsegmented sequences of Tamil characters.
 
 ## Getting started
 
 ### Install the library using `pip`
 
 ```
-!pip install git+https://github.com/ljdyer/Naive-Bayes-Space-Restorer.git
+!pip install git+https://github.com/BigHippopotamus/Naive-Bayes-Tamil-Space-Restorer.git
 ```
 
-### Import the `NBSpaceRestorer` class
+### Import the `NBTamilSpaceRestorer` class and the `map` and `unmap` functions
 
 ```python
-from nb_space_restorer import NBSpaceRestorer
+from nb_tamil_space_restorer import NBTamilSpaceRestorer
+```
+
+### Import the `map` and `unmap` functions
+
+```python
+from nb_tamil_space_restorer.mapper import map, unmap
 ```
 
 ## Model training, optimization, and inference using the `NBSpaceRestorer` class
+
+### Map/unmap text
+
+Converts multibyte Tamil characters to single-byte ASCII characters and vice versa
+
+#### Example usage:
+
+```python
+map('நன்றி')
+```
+
+> `鵵鱗鲚`
+
+```python
+unmap('鵵鱗鲚')
+```
+
+> `நன்றி`
 
 ### Initialize and train a model
 
@@ -41,20 +50,35 @@ from nb_space_restorer import NBSpaceRestorer
     # ====================
     def __init__(self,
                  train_texts: list,
+                 uyir_letters: list[str] = None,
+                 mei_letters: list[str] = None,
                  ignore_case: bool = True,
-                 save_path: Optional[str] = None):
+                 save_path: Optional[str] = None,
+                 max_n_gram: int = 2,
+                 unknown_function: str = 'exponential'):
         """Initialize and train an instance of the class.
 
         Args:
           train_texts (list):
             The list of 'gold standard' documents (running text with spaces)
             on which to train the model.
+          uyir_letters (list):
+            A mapped list of letters that can only appear at the beginning of
+            words. Can be left blank if using the included mapper and unmapper.
+          mei_letters (list):
+            A mapped list of letters that can never appear at the beginning of
+            words. Can be left blank if using the included mapper and unmapper.
           ignore_case (bool, optional):
             Whether or not to ignore case during training (so that e.g.
             'banana', 'Banana', and 'BANANA' are all counted as instances
-            of 'banana'). Defaults to True.
+            of 'banana'). Only relevant if handling English. Defaults to True.
           save_path (Optional[str], optional):
             The path to a pickle file to save the model to. Defaults to None.
+          max_n_gram (int, optional):
+            The maximum value of N to calculate all N-grams for. Defaults to 2.
+          unknown_function (str, optional):
+            The function to use to predict the probability of an unseen word.
+            Can be 'exponential' or 'gaussian', defaults to 'exponential'
         """
 ```
 
@@ -63,11 +87,11 @@ from nb_space_restorer import NBSpaceRestorer
 ```python
 restorer = NBSpaceRestorer(
     train_texts=train['reference'].to_list(),
-    ignore_case=True
+    ignore_case=True,
+    save_path='AncientTamil.pickle'
+    max_n_gram=3
 )
 ```
-
-<img src="readme-img/01-init.PNG"></img>
 
 ### Run a grid search to find optimal hyperparameters for inference
 
@@ -107,13 +131,11 @@ restorer = NBSpaceRestorer(
 restorer.add_grid_search(
     grid_search_name='grid_search_1',
     L=[18, 20, 22],
-    lambda_=[8.0, 10.0, 12.0],
+    lambda_=[1e-6, 1e-9, 1e-12],
     ref=test_ref,
     input=test_input
 )
 ```
-
-<img src="readme-img/02-add_grid_search.PNG"></img>
 
 ### Show optimal hyperparameters from the current grid search
 
@@ -151,8 +173,6 @@ restorer.add_grid_search(
 restorer.show_optimal_params(metric_to_optimize='Recall')
 ```
 
-<img src="readme-img/03-show_optimal_params.PNG"></img>
-
 ### Apply the optimal hyperparameters from the current grid search
 
 #### `NBSpaceRestorer.set_optimal_params`
@@ -188,8 +208,6 @@ restorer.show_optimal_params(metric_to_optimize='Recall')
 restorer.set_optimal_params()
 ```
 
-<img src="readme-img/04-set_optimal_params.PNG"></img>
-
 ### Load a previously saved model from a pickle file
 
 #### `NBSpaceRestorer.load`
@@ -219,13 +237,11 @@ restorer.set_optimal_params()
 #### Example usage:
 
 ```python
-NB_TedTalks = NBSpaceRestorer.load(
-    'https://raw.githubusercontent.com/ljdyer/Naive-Bayes-Space-Restorer/main/NB_TedTalks.pickle',
+restorer = NBSpaceRestorer.load(
+    'AncientTamil.pickle',
     read_only=True
 )
 ```
-
-<img src="readme-img/05-load.PNG"></img>
 
 ### Restore spaces to an unsegmented sequence of input characters
 
@@ -258,10 +274,8 @@ NB_TedTalks = NBSpaceRestorer.load(
 #### Example usage:
 
 ```python
-NB_TedTalks.restore(test_input)
+restorer.restore(test_input)
 ```
-
-<img src="readme-img/06-restore.PNG"></img>
 
 ## References
 
@@ -272,3 +286,8 @@ https://github.com/grantjenks/python-wordsegment. [Accessed May
 P. Norvig, “Natural language corpus data,” in Beautiful Data, T.
 Segaran and J. Hammerbacher, Eds. Sebastopol: O’Reilly, 2009, pp.
 219-242.
+
+Sandeep S, Sanjith S, Bharadwaj Sudarsan et al. "Word Segmentation 
+of Ancient Tamil Text extracted from inscriptions", 16 September
+2024, PREPRINT (Version 1) available at Research Square 
+[https://doi.org/10.21203/rs.3.rs-4901928/v1]
